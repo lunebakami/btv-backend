@@ -4,22 +4,22 @@
 # -----------------------------------------------
 
 type Mutation {
-  createUser(input: UserInput!): User!
-  updateUser(id: Float!, input: UserInput!): User!
+  createUser(input: UserInput!): UserSchema!
+  updateUser(id: String!, input: UserInput!): UserSchema!
 }
 
 type Query {
-  getUser(id: Float!): User!
-  getUsers: [User!]!
-}
-
-type User {
-  email: String!
-  id: Float!
-  name: String!
+  getUser(id: String!): UserSchema!
+  getUsers: [UserSchema!]!
 }
 
 input UserInput {
   email: String!
+  name: String!
+}
+
+type UserSchema {
+  email: String!
+  id: String!
   name: String!
 }

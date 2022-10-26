@@ -1,49 +1,48 @@
 import { Query, Resolver, Mutation, Arg } from 'type-graphql';
-import { UserInput, User } from './users.schema';
+import prisma from '../database';
+import { UserInput, UserSchema } from './users.schema';
 
-@Resolver(() => User)
+@Resolver(() => UserSchema)
 export class UsersResolver {
-  private users: User[] = [
-    { id: 1, name: 'John Doe', email: 'johndoe@gmail.com' },
-    { id: 2, name: 'Jane Doe', email: 'janedoe@gmail.com' },
-    { id: 3, name: 'Mike Doe', email: 'mikedoe@gmail.com' },
-  ];
+  @Query(() => [UserSchema])
+  async getUsers(): Promise<UserSchema[]> {
+    const users = await prisma.user.findMany({});
 
-  @Query(() => [User])
-  async getUsers(): Promise<User[]> {
-    return this.users;
+    return users;
   }
 
-  @Query(() => User)
-  async getUser(@Arg('id') id: number): Promise<User | undefined> {
-    const user = this.users.find((u) => u.id === id);
+  @Query(() => UserSchema)
+  async getUser(@Arg('id') id: string): Promise<UserSchema | null> {
+    const user = await prisma.user.findUnique({
+      where: {
+        id,
+      },
+    });
+
     return user;
   }
 
-  @Mutation(() => User)
-  async createUser(@Arg('input') input: UserInput): Promise<User> {
-    const user = {
-      id: this.users.length + 1,
-      ...input,
-    };
-    this.users.push(user);
+  @Mutation(() => UserSchema)
+  async createUser(@Arg('input') input: UserInput): Promise<UserSchema> {
+    const user = await prisma.user.create({
+      data: input,
+    });
+
     return user;
   }
 
-  @Mutation(() => User)
+  @Mutation(() => UserSchema)
   async updateUser(
-    @Arg('id') id: number,
+    @Arg('id') id: string,
     @Arg('input') input: UserInput
-  ): Promise<User> {
-    const user = this.users.find((u) => u.id === id);
-    if (!user) {
-      throw new Error('User not found');
-    }
-    const updatedUser = {
-      ...user,
-      ...input,
-    };
-    this.users = this.users.map((u) => (u.id === id ? updatedUser : u));
+  ): Promise<UserSchema> {
+    const updatedUser = await prisma.user.update({
+      data: input,
+      where: {
+        id,
+      },
+    });
+
     return updatedUser;
   }
 }

@@ -1,9 +1,9 @@
 import { Field, ObjectType, InputType } from 'type-graphql';
-
+import { User } from '@prisma/client';
 @ObjectType()
-export class User {
+export class UserSchema implements User {
   @Field()
-  id!: number;
+  id!: string;
 
   @Field()
   name!: string;
@@ -13,7 +13,7 @@ export class User {
 }
 
 @InputType()
-export class UserInput implements Pick<User, 'name' | 'email'> {
+export class UserInput implements Pick<UserSchema, 'name' | 'email'> {
   @Field()
   name!: string;
 
