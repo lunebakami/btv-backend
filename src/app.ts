@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import path from 'path';
 import 'reflect-metadata';
 import { graphqlHTTP } from 'express-graphql';
@@ -18,6 +19,7 @@ class App {
 
   init() {
     this.server = express();
+    this.server.use(cors());
   }
 
   async graphql() {
