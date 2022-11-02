@@ -5,6 +5,7 @@
 
 type Mutation {
   createUser(input: UserInput!): UserSchema!
+  deleteUser(id: String!): UserSchema!
   updateUser(id: String!, input: UserInput!): UserSchema!
 }
 
