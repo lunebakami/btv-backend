@@ -33,5 +33,8 @@
   },
   "prisma": {
     "schema": "src/database/schema.prisma"
+  },
+  "engines": {
+    "node": "14.18.0"
   }
 }
