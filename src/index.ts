@@ -2,7 +2,7 @@ import App from './app';
 
 const app = new App().server;
 
-const PORT = 8000;
+const PORT = process.env.PORT || 8000;
 
 app.listen(PORT);
 
